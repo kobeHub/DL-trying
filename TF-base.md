@@ -38,7 +38,9 @@ session会为当前的值和变量分配空间，并且进行运算
 
 > fetchs 是运算所需的值的list
 
+fetch参数中有几个要进行的操作调用run后就会返回几个对应的值
 
+`loss_batch, _ = sess.run([loss, optimizer])`
 
 
 
