@@ -95,6 +95,8 @@ array([[  6,  69, 996,  65],
   > maval:均匀分布的上界
   >
   > seed: 用于为分布创建一个随机的种子
+  >
+  > 对于浮点数而言，默认不指定范围时的均匀分布是[0 , 1)，但是对于整数而言必须指定范围
 
 + `tf.truncated_normal()`:
 
@@ -226,7 +228,7 @@ e='nce_loss')
 >
 > **weights:** 一个shape为[num_class, dim]的张量或者是一个张量列表shape[class_num ,dim]沿着０		　　　　　维进行连接，可能分区的嵌入
 >
-> **bias:** shape[num_classes]
+> **bias:** shape[num_claswqses]
 >
 > **labels:**目标类shape=[batch_size, num_true]  dtype=int64  
 >
@@ -238,5 +240,129 @@ e='nce_loss')
 >
 > **num_true:** 每一个训练例子对应的目标的数目
 
+## 5. tf.nn.conv2d 求单层２维卷积
+
+```python
+tf.nn.conv2d(input, 
+             filter, 
+             strides, 
+             padding, 
+             use_cudnn_on_gpu=True, 
+             data_format='NHWC', 
+             dilations=[1, 1, 1, 1], 
+             name=None)
+根据给定的4-D输入以及filter　计算二维卷积结果
+给定的输入张量具有shape = [batch, in_height, in_width, in_channels]
+卷积核具有shape = [filter_height, filter_width, in_channels, out_channels]
+然后进行以下操作：
+1. 将卷积核转化为一个二维矩阵 [filter_height*filter_width*in_channels, out_channels]
+2. 从输入的卷中提取图像信息，组成一个虚拟张量具有
+shape=[batch, out_height, out_width, filter_height*filter_width*in_channels]
+3. 对于每个虚拟张量，右乘filter矩阵
+４．ｐａｄｄｉｎｇ可取值'VALID' 'SAME'
+	'VALID＇ 在步长不能够满足匹配时，会舍弃数据后部分的多余
+    'SAME'	通过添加padding 在经过卷积运算后，输出的卷积shape与输入一致
+```
+
++ input: A 4-D tensor ,shape需要遵循'data_format'
+
++ filter: 四维卷积核，具有和输入卷相同的shape
+
++ strides: 长度为４的张量，确定了在每个维度移动窗口的步长，维度的格式遵循　`data_format`
+
+  注意需要满足 strides[0] = strides[3] = 1　通常在高和宽维度上使用相同的步长
+
++ padding: 可选　'SAME'(补全０界满足步长)  OR   'VALID（删去右侧数据以满足步长）'  指定了需要padding时的选择方式
+
++ data_format: 指定数据shape  N: batches,   H:height    W:width       C:  channels
 
 
+## 6. tf.squeeze 去除shape中的为１的维度
+
+```python
+squeeze(input, axis=None, name=None, squeeze_dims=None)
+    Removes dimensions of size 1 from the shape of a tensor.
+```
+
+对于给定的张量，该操作会删去所有为１的维度，并且返回一个相同类型的张量，如果不想去除所有维度１，可以根据给定的参数`axis=[1,3]` 删除指定维度
+
+```python
+# 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
+    tf.shape(tf.squeeze(t))  # [2, 3]
+ # 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
+    tf.shape(tf.squeeze(t, [2, 4]))  # [1, 2, 3, 1]
+```
+
+## 7.tf.reshape 改变张量形状
+
+```python
+reshape(tensor, shape, name=None)
+    Reshapes a tensor.
+    
+    Given `tensor`, this operation returns a tensor that has the same values
+    as `tensor` with shape `shape`.
+    
+    If one component of `shape` is the special value -1, the size of that dimension
+    is computed so that the total size remains constant.  In particular, a `shape`
+    of `[-1]` flattens into 1-D.  At most one component of `shape` can be -1.
+    
+    If `shape` is 1-D or higher, then the operation returns a tensor with shape
+    `shape` filled with the values of `tensor`. In this case, the number of elements
+    implied by `shape` must be the same as the number of elements in `tensor`.
+    
+    For example:
+    
+```
+    # tensor 't' is [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    reshape(tensor, shape, name=None)
+    
+        Reshapes a tensor.
+    
+    Given `tensor`, this operation returns a tensor that has the same values
+    as `tensor` with shape `shape`.
+    
+    If one component of `shape` is the special value -1, the size of that dimension
+    is computed so that the total size remains constant.  In particular, a `shape`
+    of `[-1]` flattens into 1-D.  At most one component of `shape` can be -1.
+    
+    If `shape` is 1-D or higher, then the operation returns a tensor with shape
+    `shape` filled with the values of `tensor`. In this case, the number of elements
+    implied by `shape` must be the same as the number of elements in `tensor`.
+    
+    For example:
+    
+    ```
+    # tensor 't' is [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    reshape(tensor, shape, name=None)
+    
+        Reshapes a tensor.
+
+
+​       
+
+    Given `tensor`, this operation returns a tensor that has the same values
+    as `tensor` with shape `shape`.
+    
+    If one component of `shape` is the special value -1, the size of that dimension
+    is computed so that the total size remains constant.  In particular, a `shape`
+    of `[-1]` flattens into 1-D.  At most one component of `shape` can be -1.
+    
+    If `shape` is 1-D or higher, then the operation returns a tensor with shape
+    `shape` filled with the values of `tensor`. In this case, the number of elements
+    implied by `shape` must be the same as the number of elements in `tensor`.
+    
+    For example:
+    
+    ```
+    # tensor 't' is [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    # tensor 't' has shape [9]
+    reshape(t, [3, 3]) ==> [[1, 2, 3],
+                            [4, 5, 6],
+                            [7, 8, 9]]
+    
+    # tensor 't' is [[[1, 1], [2, 2]],
+    #                [[3, 3], [4, 4]]]
+    # tensor 't' has shape [2, 2, 2]
+    reshape(t, [2, 4]) ==> [[1, 1, 2, 2],
+                            [3, 3, 4, 4]]
+    # 注意如果使用参数－１则会根据ｔｅｎｓｏｒ　shape自动对应相应的维度并且满足元素数量和ｓｈａｐｅ的关系
