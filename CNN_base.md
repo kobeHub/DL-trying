@@ -26,7 +26,7 @@
 
 并且在最后一层（全连接层）仍然具有损失函数(SVM/Softmax) 	ConvNet体系结构明确地假设输入是图像，这允许我们将某些属性编码到体系结构中。这些使得forward 函数　更有效地实施并极大地减少了网络中的参数数量
 
-![tri-nural](https://images2017.cnblogs.com/blog/853467/201710/853467-20171031123650574-11330636.png)
+![tri-nural](http://media.innohub.top/full.png)
 
 ## 2.与全连接神经网络的比较
 
@@ -159,5 +159,63 @@ output[:, :, 0]\[0] = s1 + s2 +s3 +bias = 10
 
 注意，在某些情形下参数共享假设可能失效，当ConvNet的输入图像具有特定的中心结构时，可能失效．例如：我们应该期望在图像的一侧学习完全不同的特征．一个实际的例子是当输入居中的脸的图像，希望在不同的空间位置都可以学习不同的眼镜以及头发的特征，在这种情形下，通常会放宽参数共享方案，将该层称为本地连接层**(Locally-Connected Layer)**
 
+## 5.tensorflow 中建立卷积核的函数
 
+```python
+tf.layers.conv2d(
+    inputs, 
+    filters, 
+    kernel_size, 
+    strides=(1, 1), 
+    padding='valid', 
+    data_format='channels_last', 
+    dilation_rate=(1, 1), 
+    activation=None, 
+    use_bias=True, 
+    kernel_initializer=None, 
+    bias_initializer=<tensorflow.python.ops.init_ops.Zeros object at 0x7ff604fc7128>, 
+    kernel_regularizer=None, 
+    bias_regularizer=None, 
+    activity_regularizer=None, 
+    kernel_constraint=None, 
+    bias_constraint=None, 
+    trainable=True, 
+    name=None, 
+    reuse=None)
+```
+
+This layer creates a convolution kernel that is convolved
+    (actually cross-correlated) with the layer input to produce a tensor of
+    outputs. If `use_bias` is True (and a `bias_initializer` is provided),
+    a bias vector is created and added to the outputs. Finally, if
+    `activation` is not `None`, it is applied to the outputs as well.
+
+本层创建了一个卷积层，用于和输入层的卷作点积并且输出一个张量（实际上是交叉对应），如果`use_bias`参数为真则会产生一个误差值的可初始化对象，一个误差向量被创建并且加入到输出集中，如果激活函数参数非空，将或被使用在输出集中
+
++ `input`:输入的张量对象作为卷积核的数据
+
++ `filters`: 整数，指定卷积核的数量，对应输出的卷积层depth
+
++ `kernel_size`:包含两个整数的元组或者列表，确定二维卷积核的width 以及　height
+
++ `stride`:包含两个整数的元组或者列表，确定卷积核在width  height方向上每次移动的步长，可以是单个整数确定两个方向上的移动
+
++ `padding`: 可以取值 `'valid'`  or  `'same'` 
+
+  使用`valid`选项会舍弃input volume中的多余的元素列或者行使之满足步长要求
+
+  `same` 选项会填充两侧的0界使得满足步长要求，如果需要加入的0界的数量是奇数，则右侧默认多一行
+
+
+## 6　扩张卷积
+
+最新的发展是引入了一个新的超参数到卷积层的计算中　Dilated convolutions ([paper by Fisher Yu and Vladlen Koltn](https://arxiv.org/abs/1511.07122) ) 即在卷积核做平移求卷积时　可以通过给input volume 间添加特定的间隔，获得不同的卷积结果．
+
+```
+eg:
+一个一维的卷积核size为３，当dilation_rate = 1时：
+w[0]*x[0] + w[1]*x[1] + w[2]*x[2].
+dilation_rate = 2时：
+ w[0]*x[0] + w[1]*x[2] + w[2]*x[4]
+```
 
