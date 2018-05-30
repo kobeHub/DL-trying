@@ -44,6 +44,29 @@ fetch参数中有几个要进行的操作调用run后就会返回几个对应的
 
 
 
+## InteractiveSession 交互式会话
+
+用于在交互式脚本上运行的会话，通常用在shell以及ipython，与常规session的不同点在于InteractiveSession在构建时是把自身作为默认会话的对于`@{tf.Tensor.eval}` `@{tf.Operation.run}`语句的调用会自动使用该会话执行
+
+```python
+sess = tf.InteractiveSession()
+a = tf.constant(5.6)
+b = tf.constant(7.8)
+c = a*b
+print(c.eval())	#使用eval而不需要将其传递给sess
+sess.close()
+```
+
+> **Atten:**
+>
+> 常规会话作为默认的session时需要显式调用with语句，用法如上文所述
+
+------
+
+
+
+
+
 ## Distributed Computation
 
 可以把一个图划分为几个块在多GPU下并行运算，进行分布式计算，需要指定某个GPU运行某个会话计算某个子图
