@@ -366,3 +366,17 @@ reshape(tensor, shape, name=None)
     reshape(t, [2, 4]) ==> [[1, 1, 2, 2],
                             [3, 3, 4, 4]]
     # 注意如果使用参数－１则会根据ｔｅｎｓｏｒ　shape自动对应相应的维度并且满足元素数量和ｓｈａｐｅ的关系
+
+## 8.tf文件操作
+
+```python
+from tensorflow.python.framework import graph_util
+from trensorflow.python.platform import gfile
+model_f = gfile.FastGFile("model.pb",'rb')  
+graph_def = tf.GraphDef()  
+graph_def.ParseFromString(model_f.read())  
+c = tf.import_graph_def(graph_def,return_elements=["add:0"])  
+print(sess.run(c))  
+#[array([ 11.], dtype=float32)] 
+```
+

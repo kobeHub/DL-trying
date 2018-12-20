@@ -34,3 +34,42 @@ GoogleNet: Google
 
 ![loss function](http://media.innohub.top/180530-loss.png)
 
+## tf中的赋值操作
+
+### 1. tf.assign 更新值
+
+```python
+assign(ref, value, validate_shape=None, use_locking=None, name=None)
+    Update 'ref' by assigning 'value' to it.
+```
+
+该操作在一个张量被赋值后，对该张亮的值进行更新，可以使得需要重新赋值的链式操作更为简单
+
++ ref: 需要是一个来自Variable的可变张量，可以没有被初始化
++ value: 新值
++ validate_shape: 若为真，会对value的shape进行预测，看其是否匹配原来的张量，如果为假，则直接进行赋值
++ use_locking: 是否用锁
+
+```python
+>>> a = tf.get_variable(name='weight', initializer = tf.constant(0.0))
+>>> with tf.Session() as sess:
+...     sess.run(a.initializer)
+...     print(a.eval())
+...     sess.run(a.assign(10))
+...     print(a.eval())
+... 
+```
+
+
+
+### 2. setattr()  &   getattr()
+
+```python
+setattr(obj, name, value, /)
+	对于给定的对象设置相应的属性下的值
+　　注意，属性name一定要是str,相当于　setattr(x, 'y', 0)   -->    x.y = 0
+getattr(object, name[, default])  ->   value
+```
+
+
+
