@@ -30,7 +30,7 @@ iterator = tf.data.Iterator.from_structure(train_data.output_types,
         train_data.output_shapes)
 img, label = iterator.get_next()
 
-print(f'{img.shape} {label.shape}')
+
 train_init = iterator.make_initializer(train_data)
 test_init = iterator.make_initializer(test_data)
 
@@ -50,7 +50,7 @@ preds = tf.nn.softmax(logits)
 correct_preds = tf.equal(tf.argmax(preds, 1), tf.argmax(label, 1))
 accuracy = tf.reduce_sum(tf.cast(correct_preds, tf.float32))
 
-writer = tf.summary.FileWriter('./graphs/logreg', tf.get_default_graph())
+writer = tf.summary.FileWriter('./graphs/logreg_v2', tf.get_default_graph())
 
 with tf.Session() as sess:
     start = time.time()
