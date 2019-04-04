@@ -4,12 +4,12 @@ import os
 
 import tensorflow as tf
 import tensorflow.contrib.eager as tfe
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 import time
 import utils
 
-#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 DATA_FILE = 'data/birth_life_2010.txt'
 
 tfe.enable_eager_execution()
@@ -66,7 +66,7 @@ plt.plot(data[:,0], data[:,1], 'bo')
 # In future versions of eager, you won't need to call `.numpy()` and will
 # instead be able to, in most cases, pass Tensors wherever NumPy arrays are
 # expected.
-#plt.plot(data[:,0], data[:,0] * w.numpy() + b.numpy(), 'r',
-#         label="huber regression")
-#plt.legend()
-#plt.show()
+plt.plot(data[:,0], data[:,0] * w.numpy() + b.numpy(), 'r',
+         label="huber regression")
+plt.legend()
+plt.show()
