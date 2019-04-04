@@ -4,17 +4,17 @@ import os
 
 import tensorflow as tf
 import tensorflow.contrib.eager as tfe
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 import time
 import utils
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 DATA_FILE = 'data/birth_life_2010.txt'
 
 tfe.enable_eager_execution()
 
-data, n_smaples = utils.read_birth_life_data(DATA_FILE)
+data, n_sample = utils.read_birth_life_data(DATA_FILE)
 dataset = tf.data.Dataset.from_tensor_slices((data[:,0], data[:,1]))
 
 w = tfe.Variable(0.)
@@ -32,7 +32,7 @@ def huber_loss(y, y_prediction, m=1.0):
     return t ** 2 if tf.abs(t) <= m else m * (2 * tf.abs(t) - m)
 
 def train(loss_fn):
-    print(f'Train loss fuction: {loss_fn.__name__}')
+    print('Train loss fuction: {}'.format(loss_fn.__name__))
     optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 
     # Define the function through which to differentiate
@@ -52,9 +52,9 @@ def train(loss_fn):
             optimizer.apply_gradients(gradients)
             total_loss += loss
         if epoch % 10 == 0:
-            print(f'Epoch {epoch}: {total_loss/n_smaples}')
+            print('Epoch {}: {:.5f}'.format(epoch, total_loss/n_sample))
 
-    print(f'Took {time.time() - start} seconds..')
+    print('Took {:.2f} seconds..'.format(time.time() - start))
     print('Eager execution exhibits significant overhead per operation. '
         'As you increase your batch size, the impact of the overhead will '
         'become less noticeable. Eager execution is under active development: '
@@ -66,7 +66,7 @@ plt.plot(data[:,0], data[:,1], 'bo')
 # In future versions of eager, you won't need to call `.numpy()` and will
 # instead be able to, in most cases, pass Tensors wherever NumPy arrays are
 # expected.
-plt.plot(data[:,0], data[:,0] * w.numpy() + b.numpy(), 'r',
-         label="huber regression")
-plt.legend()
-plt.show()
+#plt.plot(data[:,0], data[:,0] * w.numpy() + b.numpy(), 'r',
+#         label="huber regression")
+#plt.legend()
+#plt.show()
