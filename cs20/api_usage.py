@@ -95,6 +95,7 @@ x = tf.constant([5, 2, 3, 5, 10, 6, 2, 3, 4, 2, 1, 1, 0, 9])
 outs = tf.unique(x)
 print(sess.run([x, outs]))
 
+
 ###############################################################################
 # 1h: Create two tensors x and y of shape 300 from any normal distribution,
 # as long as they are from the same distribution.
