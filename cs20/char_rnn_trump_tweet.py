@@ -59,7 +59,7 @@ def read_batch(stream, batch_size):
 HIDDEN_SIZE = [128, 256]
 BATCH_SIZE = 64
 LR = 0.0003
-SKIP_STEP = 500
+SKIP_STEP = 1000
 NUM_STEP = 50    #用于RNN展开
 LENGTH = 200     # length of the generated text
 
